@@ -7,7 +7,7 @@ public class Angle implements Shape {
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setStroke(Color.GRAY);
+        gr.setStroke(Color.BLACK);
         gr.setLineWidth(5);
 
         //Горизонтальный отрезок

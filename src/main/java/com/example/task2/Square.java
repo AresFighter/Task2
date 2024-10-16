@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 public class Square implements Shape {
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setFill(Color.YELLOW);
+        gr.setFill(Color.DARKORANGE);
         gr.fillRect(150, 100, 100, 100);
     }
 

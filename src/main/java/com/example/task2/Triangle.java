@@ -7,7 +7,7 @@ public class Triangle implements Shape {
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setFill(Color.BLUE);
+        gr.setFill(Color.INDIGO);
 
         double[] xPoints = {200, 250, 150};
         double[] yPoints = {100, 200, 200};
