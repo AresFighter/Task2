@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.task2.Controller">
+  <FlowPane alignment="CENTER" prefHeight="65.0" prefWidth="187.0">
+    <children>
+      <Label prefHeight="18.0" prefWidth="221.0" text="Введите количество сторон фигуры:" />
+      <TextField fx:id="fieldsides" prefHeight="26.0" prefWidth="102.0"/>
+    </children>
+  </FlowPane>
+  <Button onAction="#addPikcher" text="Нарисовать" />
+  <Canvas fx:id="canvas" height="304.0" style="-fx-border-color: black;" width="400" />
+  <Label fx:id="shapeLabel" layoutX="50" layoutY="420"/>
+</VBox>
