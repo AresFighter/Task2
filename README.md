@@ -22,4 +22,4 @@
 
 ## Результат 
 
-![Вывод на экран тругоника]("C:\Users\Admin\Desktop\ВУЗ\Программная инженерия\Снимок экрана 2024-10-17 025626.png")
+![Вывод на экран тругоника](https://github.com/AresFighter/Task2/blob/master/%D0%A0%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82_task2.png)
