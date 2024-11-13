@@ -7,7 +7,7 @@
 <VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.task2.Controller">
   <FlowPane alignment="CENTER" prefHeight="65.0" prefWidth="187.0">
     <children>
-      <Label prefHeight="18.0" prefWidth="221.0" text="Введите количество сторон фигуры:" />
+      <Label prefHeight="18.0" prefWidth="270.0" text="Введите количество сторон фигуры (от 0 до 5):" />
       <TextField fx:id="fieldsides" prefHeight="26.0" prefWidth="102.0"/>
     </children>
   </FlowPane>
