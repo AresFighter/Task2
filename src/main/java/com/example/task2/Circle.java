@@ -4,14 +4,19 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Circle extends Shape {
-    public Circle(Color color) {
-        super(color);
+
+    private double radius;
+
+    public Circle(double x, double y, double radius, Color color) {
+
+        super(x, y, color);
+        this.radius = radius;
     }
 
     @Override
     public void draw(GraphicsContext gr) {
         gr.setFill(color);
-        gr.fillOval(150, 100, 100, 100);
+        gr.fillOval(x - radius, y - radius,2 * radius, 2 * radius);
     }
 
     @Override
