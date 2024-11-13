@@ -1,11 +1,7 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
+# Игнорируем все по умолчанию
+/*
 
-### IntelliJ IDEA ###
-.idea/modules.xml
-.idea/jarRepositories.xml
-.idea/compiler.xml
-.idea/libraries/
-*.iws
-*.iml
-*.ipr
+# Оставляем только исходный код, pom-файл и Readme
+!src/
+!README.md
+!pom.xml
