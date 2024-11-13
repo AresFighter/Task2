@@ -9,27 +9,27 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.task2.Controller">
+  <Label text="В графическом редакторе можно рисовать следующими фигурами: круг, прямоугольник, треугольник и плюс" prefHeight="100.0"/>
   <!-- Ввод названия фигуры -->
-  <FlowPane alignment="CENTER" prefHeight="65.0" prefWidth="400.0">
+  <FlowPane alignment="CENTER" hgap="20" prefHeight="65.0" prefWidth="400.0">
     <children>
-      <Label text="Введите название фигуры (круг, прямоугольник, треугольник):" />
+      <Label text="Введите название фигуры:" />
       <TextField fx:id="fieldShape" prefHeight="26.0" prefWidth="150.0"/>
+      <!-- Кнопка для выбора фигуры -->
+      <Button onAction="#onShapeSelected" text="Выбрать" />
     </children>
   </FlowPane>
-
-  <!-- Кнопка для выбора фигуры -->
-  <Button onAction="#onShapeSelected" text="Выбрать" />
 
   <!-- Выбор цвета фигуры -->
   <FlowPane alignment="CENTER" prefHeight="50.0" prefWidth="400.0">
     <children>
-      <Label text="Выберите цвет:" />
+      <Label text="Выберите цвет: " />
       <ColorPicker fx:id="colorPicker" />
     </children>
   </FlowPane>
 
   <!-- Канва для рисования -->
-  <Canvas fx:id="canvas" height="300.0" width="500.0" style="-fx-border-color: black;"
+  <Canvas fx:id="canvas" height="300.0" width="600.0" style="-fx-border-color: black;"
           onMousePressed="#onMousePressed" onMouseDragged="#onMouseDragged" onMouseReleased="#onMouseReleased" />
 
   <!-- Отображение информации о фигуре -->
