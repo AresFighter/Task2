@@ -30,12 +30,12 @@ public class Controller {
                 gr.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                 shape.draw(gr);
 
-                shapeLabel.setText("This is " + shape.descriptor());
+                shapeLabel.setText("Данная фигура - " + shape.descriptor());
             } else {
-                showError("Invalid number of sides!");
+                showError("Недопустимое количество сторон!");
             }
         } catch (NumberFormatException e) {
-            showError("Please enter a valid number.");
+            showError("Введите корректное число.");
         }
     }
 
