@@ -3,11 +3,15 @@ package com.example.task2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Angle implements Shape {
+public class Angle extends Shape {
+
+    public Angle(Color color) {
+        super(color);
+    }
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setStroke(Color.BLACK);
+        gr.setStroke(color);
         gr.setLineWidth(5);
 
         //Горизонтальный отрезок
@@ -18,6 +22,6 @@ public class Angle implements Shape {
 
     @Override
     public String descriptor() {
-        return "Angle";
+        return "угол";
     }
 }
