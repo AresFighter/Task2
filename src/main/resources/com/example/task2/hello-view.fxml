@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.task2_new.Controller">
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.6" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.task2.Controller">
   <!-- Выбор фигуры из списка -->
   <FlowPane alignment="CENTER" prefHeight="150.0" prefWidth="400.0">
     <children>

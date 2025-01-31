@@ -6,13 +6,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controller {
-
     @FXML
-    private TextField fieldShape;
+    private ListView<String> shapeListView;
     @FXML
     private Canvas canvas;
     @FXML
@@ -20,24 +21,30 @@ public class Controller {
     @FXML
     private ColorPicker colorPicker;
 
-    private String selectedShape;  // Хранение выбранной фигуры
+    private final ShapeFactory factory = new ShapeFactory();
+    private final Caretaker caretaker = new Caretaker();
+    private final List<Shape> shapes = new ArrayList<>();
+    private Shape selectedShape;
 
     @FXML
-    public void onShapeSelected() {
-        String shapeType = fieldShape.getText().trim();
-        if (shapeType.isEmpty()) {
-            showError("Пожалуйста, введите название фигуры.");
-            return;
-        }
+    public void initialize() {
+        // Заполняем ListView доступными фигурами
+        shapeListView.getItems().addAll(factory.getAllShapes().keySet());
 
-        ShapeFactory factory = new ShapeFactory();
-        Shape shape = factory.createShape(shapeType, 0, 0, Color.BLACK); // Пробуем создать фигуру
+        // Устанавливаем слушатель выбора
+        shapeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                onShapeSelected(newValue);
+            }
+        });
+    }
 
-        if (shape != null) {
-            selectedShape = shapeType;  // Сохраняем выбранную фигуру
-            shapeLabel.setText("Выбрана фигура: " + shape.descriptor());  // Показываем описание фигуры
+    public void onShapeSelected(String shapeType) {
+        selectedShape = factory.getShape(shapeType); // Клонируем объект
+        if (selectedShape != null) {
+            shapeLabel.setText("Выбрана фигура: " + selectedShape.descriptor());
         } else {
-            showError("Неверный тип фигуры! Попробуйте снова.");
+            showError("Ошибка выбора фигуры.");
         }
     }
 
@@ -53,11 +60,11 @@ public class Controller {
 
     @FXML
     public void onMouseReleased(javafx.scene.input.MouseEvent event) {
-        // Завершаем рисование
+
     }
 
     private void drawShape(double x, double y) {
-        if (selectedShape == null || selectedShape.isEmpty()) {
+        if (selectedShape == null) {
             showError("Сначала выберите фигуру!");
             return;
         }
@@ -65,13 +72,40 @@ public class Controller {
         GraphicsContext gr = canvas.getGraphicsContext2D();
         Color selectedColor = colorPicker.getValue();
 
-        ShapeFactory factory = new ShapeFactory();
-        Shape shape = factory.createShape(selectedShape, x, y, selectedColor);
+        // Клонируем выбранную фигуру и задаем координаты
+        Shape shapeToDraw = (Shape) selectedShape.clone();
+        if (shapeToDraw != null) {
+            shapeToDraw.x = x;
+            shapeToDraw.y = y;
+            shapeToDraw.color = selectedColor;
+            shapeToDraw.draw(gr);
 
-        if (shape != null) {
-            shape.draw(gr);
+            // Сохраняем текущее состояние
+            //caretaker.saveState(new Memento(shapeToDraw));
+            caretaker.saveState(new Memento(shapes));
+            shapes.add(shapeToDraw);
         } else {
-            showError("Не удалось нарисовать фигуру. Попробуйте снова.");
+            showError("Ошибка рисования фигуры.");
+        }
+    }
+
+    @FXML
+    public void undo() {// Откат последнего действия
+        Memento memento = caretaker.retrieveState();
+        if (memento != null) {
+            //shapes.remove(memento.getShape());
+            memento.restore(shapes); // Восстанавливаем состояние списка фигур
+            redrawCanvas();
+        } else {
+            showError("Больше нечего отменять.");
+        }
+    }
+
+    private void redrawCanvas() {
+        GraphicsContext gr = canvas.getGraphicsContext2D();
+        gr.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        for (Shape shape : shapes) {
+            shape.draw(gr);
         }
     }
 
@@ -84,6 +118,6 @@ public class Controller {
     @FXML
     public void cleanCan() {
         GraphicsContext gr = canvas.getGraphicsContext2D();
-        gr.clearRect(0,0,canvas.getWidth(),canvas.getHeight());
+        gr.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 }
