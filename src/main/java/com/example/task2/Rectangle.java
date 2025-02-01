@@ -3,10 +3,10 @@ package com.example.task2;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
-public class Square extends Shape {
-    public Square(double size, Paint color) {
+public class Rectangle extends Shape {
+    public Rectangle(double size, Paint color) {
         super(size, color);
-        this.type = "Square";
+        this.type = "Rectangle";
     }
 
     @Override
@@ -15,13 +15,13 @@ public class Square extends Shape {
         this.y = y;
         gr.setFill(color);
         gr.setGlobalAlpha(opacity); // Устанавливаем прозрачность
-        gr.fillRect(x - size / 2, y - size / 2, size, size);
-        gr.strokeRect(x - size / 2, y - size / 2, size, size); // Добавляем отрисовку контура
+        gr.fillRect(x - size / 2, y - size / 2, size * 1.5, size);
+        gr.strokeRect(x - size / 2, y - size / 2, size * 1.5, size); // Добавляем отрисовку контура
         gr.setGlobalAlpha(1.0); // Сбрасываем прозрачность
     }
 
     @Override
     public String toString() {
-        return "Квадрат";
+        return "Прямоугольник";
     }
 }
