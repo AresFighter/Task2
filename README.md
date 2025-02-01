@@ -43,4 +43,4 @@
 ![Наблюдатель](https://github.com/AresFighter/Task2/blob/Laba3-(task7)/Laba3_result.jpg)
 
 ## Архитектура
-![Вывод на экран Диаграммы Классов](https://github.com/AresFighter/Task2/blob/Laba3-(task7)/Laba3_arch.png)
+![Вывод на экран Диаграммы Классов](https://github.com/AresFighter/Task2/blob/Laba3-(task7)/Laba3_arch.jpg)
