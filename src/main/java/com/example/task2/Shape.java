@@ -4,19 +4,26 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public abstract class Shape implements Cloneable {
-
     protected double x;
-
     protected double y;
-
     protected Color color; // Общий цвет для всех фигур
 
+    // Конструктор по умолчанию
+    public Shape() {
+        this.x = 0;
+        this.y = 0;
+        this.color = Color.BLACK; // Значение по умолчанию
+    }
+
+    // Конструктор с параметрами
     public Shape(double x, double y, Color color) {
         this.x = x;
         this.y = y;
         this.color = color;
     }
+
     public abstract void draw(GraphicsContext gr);
+
     public abstract String descriptor();
 
     @Override

@@ -7,7 +7,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +25,21 @@ public class Controller {
 
     private final ShapeFactory factory = new ShapeFactory();
     private final Caretaker caretaker = new Caretaker();
-    private final List<Shape> shapes = new ArrayList<>();
-    private Shape selectedShape;
+    private final List<Shape> shapes = new ArrayList<>(); // Все фигуры на холсте
+    private Shape selectedShape; // Выбранная фигура для рисования
+    private boolean isSelecting = false; // Флаг для режима выделения
+    private double selectStartX, selectStartY; // Начальные координаты выделения
+    private final ShapeGroup selectedShapes = new ShapeGroup(); // Выделенные фигуры (группа)
+    private boolean isDrawingMode = true; // По умолчанию режим рисования
+    private double dragStartX, dragStartY; // Начальные координаты мыши при перемещении
+    private List<Double> shapesStartX = new ArrayList<>(); // Начальные координаты X выделенных фигур
+    private List<Double> shapesStartY = new ArrayList<>(); // Начальные координаты Y выделенных фигур
+    private boolean isDrawingLine = false; // Флаг для режима рисования линии
 
     @FXML
     public void initialize() {
         // Заполняем ListView доступными фигурами
         shapeListView.getItems().addAll(factory.getAllShapes().keySet());
-
         // Устанавливаем слушатель выбора
         shapeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -49,18 +58,106 @@ public class Controller {
     }
 
     @FXML
-    public void onMousePressed(javafx.scene.input.MouseEvent event) {
-        drawShape(event.getX(), event.getY());
+    public void onMousePressed(MouseEvent event) {
+        if (isDrawingMode) { // Если режим рисования
+            if (event.isPrimaryButtonDown()) { // Если нажата левая кнопка мыши
+                isDrawingLine = true; // Начинаем рисование линии
+                drawShape(event.getX(), event.getY()); // Рисуем первую фигуру
+            }
+        } else { // Режим выделения
+            if (event.isPrimaryButtonDown()) { // Если нажата левая кнопка мыши
+                if (!selectedShapes.isEmpty()) { // Если есть выделенные фигуры
+                    // Запоминаем начальные координаты мыши и фигур
+                    dragStartX = event.getX();
+                    dragStartY = event.getY();
+                    shapesStartX.clear();
+                    shapesStartY.clear();
+                    for (Shape shape : selectedShapes.getShapes()) {
+                        shapesStartX.add(shape.x);
+                        shapesStartY.add(shape.y);
+                    }
+                }
+            } else if (event.isSecondaryButtonDown()) { // Если нажата правая кнопка мыши, начинаем выделение
+                isSelecting = true;
+                selectStartX = event.getX();
+                selectStartY = event.getY();
+            }
+        }
     }
 
     @FXML
-    public void onMouseDragged(javafx.scene.input.MouseEvent event) {
-        drawShape(event.getX(), event.getY());
+    public void onMouseDragged(MouseEvent event) {
+        if (isDrawingMode) { // Если режим рисования
+            if (isDrawingLine && event.isPrimaryButtonDown()) { // Если рисуем линию и нажата левая кнопка мыши
+                drawShape(event.getX(), event.getY()); // Рисуем фигуру вдоль траектории мыши
+            }
+        } else { // Режим выделения
+            if (!selectedShapes.isEmpty() && !shapesStartX.isEmpty()) { // Если есть выделенные фигуры и начальные координаты
+                // Вычисляем смещение мыши
+                double offsetX = event.getX() - dragStartX;
+                double offsetY = event.getY() - dragStartY;
+
+                // Обновляем координаты выделенных фигур
+                int i = 0;
+                for (Shape shape : selectedShapes.getShapes()) {
+                    shape.x = shapesStartX.get(i) + offsetX;
+                    shape.y = shapesStartY.get(i) + offsetY;
+                    i++;
+                }
+
+                // Перерисовываем холст
+                redrawCanvas();
+            } else if (isSelecting) { // Если идет выделение
+                // Рисуем прямоугольник выделения
+                GraphicsContext gr = canvas.getGraphicsContext2D();
+                gr.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                redrawCanvas();
+                gr.setStroke(Color.BLUE);
+                gr.strokeRect(selectStartX, selectStartY, event.getX() - selectStartX, event.getY() - selectStartY);
+            }
+        }
     }
 
     @FXML
-    public void onMouseReleased(javafx.scene.input.MouseEvent event) {
+    public void onMouseReleased(MouseEvent event) {
+        if (isDrawingMode) { // Если режим рисования
+            if (isDrawingLine) { // Если завершено рисование линии
+                isDrawingLine = false; // Завершаем рисование линии
+            }
+        } else { // Режим выделения
+            if (isSelecting) { // Если завершено выделение
+                isSelecting = false;
+                selectShapesInArea(selectStartX, selectStartY, event.getX(), event.getY());
+                redrawCanvas();
+            } else if (!selectedShapes.isEmpty()) { // Если завершено перемещение
+                // Сохраняем состояние после перемещения
+                caretaker.saveState(new Memento(shapes));
 
+                // Очищаем выделение после перемещения
+                selectedShapes.clear();
+                redrawCanvas(); // Перерисовываем холст без выделения
+            }
+        }
+    }
+
+    @FXML
+    public void toggleMode() {
+        isDrawingMode = !isDrawingMode;
+        shapeLabel.setText(isDrawingMode ? "Режим: Рисование" : "Режим: Выделение");
+    }
+
+    private void selectShapesInArea(double startX, double startY, double endX, double endY) {
+        selectedShapes.clear();
+        double minX = Math.min(startX, endX);
+        double maxX = Math.max(startX, endX);
+        double minY = Math.min(startY, endY);
+        double maxY = Math.max(startY, endY);
+
+        for (Shape shape : shapes) {
+            if (shape.x >= minX && shape.x <= maxX && shape.y >= minY && shape.y <= maxY) {
+                selectedShapes.addShape(shape);
+            }
+        }
     }
 
     private void drawShape(double x, double y) {
@@ -68,7 +165,6 @@ public class Controller {
             showError("Сначала выберите фигуру!");
             return;
         }
-
         GraphicsContext gr = canvas.getGraphicsContext2D();
         Color selectedColor = colorPicker.getValue();
 
@@ -81,7 +177,6 @@ public class Controller {
             shapeToDraw.draw(gr);
 
             // Сохраняем текущее состояние
-            //caretaker.saveState(new Memento(shapeToDraw));
             caretaker.saveState(new Memento(shapes));
             shapes.add(shapeToDraw);
         } else {
@@ -90,10 +185,10 @@ public class Controller {
     }
 
     @FXML
-    public void undo() {// Откат последнего действия
+    public void undo() {
+        // Откат последнего действия
         Memento memento = caretaker.retrieveState();
         if (memento != null) {
-            //shapes.remove(memento.getShape());
             memento.restore(shapes); // Восстанавливаем состояние списка фигур
             redrawCanvas();
         } else {
@@ -106,6 +201,13 @@ public class Controller {
         gr.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for (Shape shape : shapes) {
             shape.draw(gr);
+        }
+        // Подсветка выделенных фигур (только если есть выделенные фигуры)
+        if (!selectedShapes.isEmpty()) {
+            for (Shape shape : selectedShapes.getShapes()) {
+                gr.setStroke(Color.RED);
+                gr.strokeRect(shape.x - 2, shape.y - 2, 10, 10); // Рисуем рамку вокруг выделенных фигур
+            }
         }
     }
 
