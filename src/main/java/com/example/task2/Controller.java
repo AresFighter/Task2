@@ -9,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +39,7 @@ public class Controller {
     public void initialize() {
         // Заполняем ListView доступными фигурами
         shapeListView.getItems().addAll(factory.getAllShapes().keySet());
+
         // Устанавливаем слушатель выбора
         shapeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -165,6 +165,7 @@ public class Controller {
             showError("Сначала выберите фигуру!");
             return;
         }
+
         GraphicsContext gr = canvas.getGraphicsContext2D();
         Color selectedColor = colorPicker.getValue();
 
