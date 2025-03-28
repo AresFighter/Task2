@@ -32,13 +32,6 @@ public class ShapeGroup extends Shape {
         shapes.clear();
     }
 
-    // Отрисовка всех фигур в группе
-    /*@Override
-    public void draw(GraphicsContext gr) {
-        for (Shape shape : shapes) {
-            shape.draw(gr);
-        }
-    }*/
     @Override
     public void draw(GraphicsContext gr) {
         if (isEmpty()) return; // Не рисуем пустую группу

@@ -165,6 +165,7 @@ public class Controller {
         shapeLabel.setText(isDrawingMode ? "Режим: Рисование" : "Режим: Выделение");
     }
 
+    // Выбор фигур в область
     private void selectShapesInArea(double startX, double startY, double endX, double endY) {
         selectedShapes.clear();
         double minX = Math.min(startX, endX);
@@ -195,9 +196,6 @@ public class Controller {
         // Клонируем выбранную фигуру и задаем координаты
         Shape shapeToDraw = (Shape) selectedShape.clone();
         if (shapeToDraw != null) {
-            /*shapeToDraw.x = x;
-            shapeToDraw.y = y;
-            shapeToDraw.color = selectedColor;*/
             shapeToDraw.setX(x);
             shapeToDraw.setY(y);
             shapeToDraw.setColor(selectedColor);

@@ -15,9 +15,7 @@ import javafx.scene.paint.Color;
  */
 
 public abstract class Shape implements Cloneable {
-    /*protected double x;
-    protected double y;
-    protected Color color; // Общий цвет для всех фигур*/
+    // Поля
     private double x;
     private double y;
     private Color color;
