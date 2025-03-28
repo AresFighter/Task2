@@ -1,12 +1,15 @@
-package com.example.task2;
+package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public abstract class Shape implements Cloneable {
-    protected double x;
+    /*protected double x;
     protected double y;
-    protected Color color; // Общий цвет для всех фигур
+    protected Color color; // Общий цвет для всех фигур*/
+    private double x;
+    private double y;
+    private Color color;
 
     // Конструктор по умолчанию
     public Shape() {
@@ -22,9 +25,35 @@ public abstract class Shape implements Cloneable {
         this.color = color;
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public abstract void draw(GraphicsContext gr);
 
     public abstract String descriptor();
+
+    public abstract boolean isEmpty();
 
     @Override
     public Object clone() {

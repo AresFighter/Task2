@@ -1,4 +1,4 @@
-package com.example.task2;
+package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -15,8 +15,13 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setFill(color);
-        gr.fillRect(x, y, width, height);
+        gr.setFill(getColor());
+        gr.fillRect(getX(), getY(), width, height);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false; // Лист никогда не пуст
     }
 
     @Override

@@ -1,4 +1,6 @@
-package com.example.task2;
+package model.memento;
+
+import model.shapes.Shape;
 
 import java.util.ArrayList;
 import java.util.List;

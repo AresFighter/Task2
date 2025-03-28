@@ -1,8 +1,9 @@
-package com.example.task2;
+package model.factory;
 
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
+import model.shapes.*;
 
 public class ShapeFactory {
     private final Map<String, Shape> shapeMap = new HashMap<>();

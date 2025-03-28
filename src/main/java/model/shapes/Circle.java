@@ -1,4 +1,4 @@
-package com.example.task2;
+package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -14,8 +14,13 @@ public class Circle extends Shape {
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setFill(color);
-        gr.fillOval(x - radius, y - radius, 2 * radius, 2 * radius);
+        gr.setFill(getColor());
+        gr.fillOval(getX() - radius, getY() - radius, 2 * radius, 2 * radius);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false; // Лист никогда не пуст
     }
 
     @Override

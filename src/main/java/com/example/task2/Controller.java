@@ -1,5 +1,9 @@
 package com.example.task2;
 
+import model.factory.ShapeFactory;
+import model.memento.Caretaker;
+import model.memento.Memento;
+import model.shapes.Shape;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import model.shapes.ShapeGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,8 +79,8 @@ public class Controller {
                     shapesStartX.clear();
                     shapesStartY.clear();
                     for (Shape shape : selectedShapes.getShapes()) {
-                        shapesStartX.add(shape.x);
-                        shapesStartY.add(shape.y);
+                        shapesStartX.add(shape.getX());
+                        shapesStartY.add(shape.getY());
                     }
                 }
             } else if (event.isSecondaryButtonDown()) { // Если нажата правая кнопка мыши, начинаем выделение
@@ -99,10 +105,23 @@ public class Controller {
 
                 // Обновляем координаты выделенных фигур
                 int i = 0;
-                for (Shape shape : selectedShapes.getShapes()) {
-                    shape.x = shapesStartX.get(i) + offsetX;
-                    shape.y = shapesStartY.get(i) + offsetY;
+                /*for (Shape shape : selectedShapes.getShapes()) {
+                    /*shape.x = shapesStartX.get(i) + offsetX;
+                    shape.y = shapesStartY.get(i) + offsetY;*/
+                    /*shape.setX(shapesStartX.get(i) + offsetX);
+                    shape.setY(shapesStartY.get(i) + offsetY);
                     i++;
+                }*/
+                // В методе onMouseDragged
+                if (!selectedShapes.isEmpty()) {
+                    for (Shape shape : selectedShapes.getShapes()) {
+                        if (shape.isEmpty()) continue; // Пропускаем пустые группы
+                        if (i < shapesStartX.size() && i < shapesStartY.size()) { // Проверка индекса
+                            shape.setX(shapesStartX.get(i) + offsetX);
+                            shape.setY(shapesStartY.get(i) + offsetY);
+                        }
+                        i++;
+                    }
                 }
 
                 // Перерисовываем холст
@@ -154,8 +173,12 @@ public class Controller {
         double maxY = Math.max(startY, endY);
 
         for (Shape shape : shapes) {
-            if (shape.x >= minX && shape.x <= maxX && shape.y >= minY && shape.y <= maxY) {
-                selectedShapes.addShape(shape);
+            if (shape.getX() >= minX && shape.getX() <= maxX && shape.getY() >= minY && shape.getY() <= maxY) {
+                try {
+                    selectedShapes.addShape(shape);
+                } catch (UnsupportedOperationException e) {
+                    showError("Нельзя добавить фигуру в одиночный объект");
+                }
             }
         }
     }
@@ -172,9 +195,12 @@ public class Controller {
         // Клонируем выбранную фигуру и задаем координаты
         Shape shapeToDraw = (Shape) selectedShape.clone();
         if (shapeToDraw != null) {
-            shapeToDraw.x = x;
+            /*shapeToDraw.x = x;
             shapeToDraw.y = y;
-            shapeToDraw.color = selectedColor;
+            shapeToDraw.color = selectedColor;*/
+            shapeToDraw.setX(x);
+            shapeToDraw.setY(y);
+            shapeToDraw.setColor(selectedColor);
             shapeToDraw.draw(gr);
 
             // Сохраняем текущее состояние
@@ -206,8 +232,9 @@ public class Controller {
         // Подсветка выделенных фигур (только если есть выделенные фигуры)
         if (!selectedShapes.isEmpty()) {
             for (Shape shape : selectedShapes.getShapes()) {
+                if (shape.isEmpty()) continue; // Пропускаем пустые группы
                 gr.setStroke(Color.RED);
-                gr.strokeRect(shape.x - 2, shape.y - 2, 10, 10); // Рисуем рамку вокруг выделенных фигур
+                gr.strokeRect(shape.getX() - 2, shape.getY() - 2, 10, 10); // Рисуем рамку вокруг выделенных фигур
             }
         }
     }

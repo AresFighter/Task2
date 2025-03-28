@@ -1,4 +1,4 @@
-package com.example.task2;
+package model.memento;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

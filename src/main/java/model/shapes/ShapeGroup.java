@@ -1,4 +1,4 @@
-package com.example.task2;
+package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
@@ -33,8 +33,15 @@ public class ShapeGroup extends Shape {
     }
 
     // Отрисовка всех фигур в группе
+    /*@Override
+    public void draw(GraphicsContext gr) {
+        for (Shape shape : shapes) {
+            shape.draw(gr);
+        }
+    }*/
     @Override
     public void draw(GraphicsContext gr) {
+        if (isEmpty()) return; // Не рисуем пустую группу
         for (Shape shape : shapes) {
             shape.draw(gr);
         }

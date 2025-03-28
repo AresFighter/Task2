@@ -1,4 +1,4 @@
-package com.example.task2;
+package model.shapes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -18,13 +18,18 @@ public class Triangle extends Shape {
 
     @Override
     public void draw(GraphicsContext gr) {
-        gr.setFill(color);
+        gr.setFill(getColor());
 
         // Определяем координаты трёх точек
-        double[] xPoints = {x, x + alpha, x - beta};
-        double[] yPoints = {y, y + omega, y + omega};
+        double[] xPoints = {getX(), getX() + alpha, getX() - beta};
+        double[] yPoints = {getY(), getY() + omega, getY() + omega};
 
         gr.fillPolygon(xPoints, yPoints, 3);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false; // Лист никогда не пуст
     }
 
     @Override
