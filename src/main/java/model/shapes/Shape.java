@@ -3,6 +3,17 @@ package model.shapes;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Абстрактный класс, представляющий геометрическую фигуру.
+ * Содержит базовые свойства и методы для всех фигур:
+ * <ul>
+ *     <li>Координаты центра (x, y)</li>
+ *     <li>Цвет заливки</li>
+ *     <li>Метод отрисовки</li>
+ * </ul>
+ * Все наследники должны реализовать методы {@link #draw(GraphicsContext)} и {@link #descriptor()}.
+ */
+
 public abstract class Shape implements Cloneable {
     /*protected double x;
     protected double y;
@@ -52,6 +63,11 @@ public abstract class Shape implements Cloneable {
     public abstract void draw(GraphicsContext gr);
 
     public abstract String descriptor();
+
+    /**
+     * Проверяет, является ли объект пустым (актуально для групп).
+     * @return {@code true}, если объект не содержит данных для обработки
+     */
 
     public abstract boolean isEmpty();
 
